@@ -45,6 +45,11 @@ npm run dev
 
 로컬 개발 시에는 `.env.example` 을 `.env` 로 복사해 같은 값을 넣으면 됩니다.
 
+## 피그마 연동
+디자인 파일: https://www.figma.com/design/x5YHk3Cr68xQ4xluzTsdlK
+
+앱 화면을 피그마로 다시 보내려면(로컬 프리뷰 실행 후) 주소 뒤에 Figma MCP가 발급한 `#figmacapture=...` 해시를 붙여 열면 됩니다. 해시가 있을 때만 캡처 스크립트가 로드되고 390px 폰 폭으로 고정됩니다.
+
 ## 구조
 ```
 src/

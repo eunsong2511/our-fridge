@@ -77,3 +77,10 @@ input[type="date"] { -webkit-appearance: none; appearance: none; min-height: 2.7
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* 피그마 캡처 모드: 폰 폭 고정, 고정 요소를 흐름 안으로 */
+html.capture body { background: var(--color-cream); }
+html.capture #root > div { max-width: 390px; margin: 0 auto; }
+html.capture header { position: static !important; }
+html.capture nav { position: static !important; padding-bottom: 12px !important; }
+html.capture main { padding-bottom: 1.5rem !important; }
