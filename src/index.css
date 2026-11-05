@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+html, body { height: 100%; }
+body { margin: 0; background: #f8fafc; color: #0f172a; }
+input, select, button, textarea { font: inherit; }
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 4.5rem); }
