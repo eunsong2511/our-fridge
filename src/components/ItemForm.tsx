@@ -97,12 +97,12 @@ export function ItemForm({ open, initial, onClose, onSave, onDelete }: Props) {
             <input className={inputCls} value={name} onChange={(e) => onNameChange(e.target.value)} onFocus={() => setShowSuggest(true)}
               placeholder="예: 달걀, 삼겹살, 우유" autoFocus={!initial} required />
             {suggestions.length > 0 && (
-              <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+              <ul className="absolute z-10 mt-2 w-full overflow-hidden rounded-2xl border border-line bg-paper shadow-float animate-rise">
                 {suggestions.map((s) => (
                   <li key={s.id}>
                     <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => pick(s.id)}
-                      className="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-emerald-50">
-                      <span>{s.name}</span><span className="text-xs text-slate-400">{s.category} · {s.defaultStorage} {s.shelf[s.defaultStorage]}일</span>
+                      className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm hover:bg-cream">
+                      <span className="font-semibold">{s.name}</span><span className="text-xs text-ink-3">{s.category} · {s.defaultStorage} {s.shelf[s.defaultStorage]}일</span>
                     </button>
                   </li>
                 ))}
@@ -130,7 +130,7 @@ export function ItemForm({ open, initial, onClose, onSave, onDelete }: Props) {
         <div className="flex flex-wrap gap-1.5">
           {[3, 7, 14, 30].map((d) => (
             <button key={d} type="button" onClick={() => { setExpiresAt(addDays(purchasedAt, d)); setTouchedExpiry(true) }}
-              className="rounded-full border border-slate-200 px-2.5 py-1 text-xs text-slate-600 hover:bg-slate-50">+{d}일</button>
+              className="rounded-full bg-cream-2 px-3 py-1.5 text-xs font-bold text-ink-2 transition active:scale-95 hover:bg-line">+{d}일</button>
           ))}
         </div>
         <Field label="분류">
@@ -141,9 +141,9 @@ export function ItemForm({ open, initial, onClose, onSave, onDelete }: Props) {
         <Field label="메모 (선택)"><input className={inputCls} value={memo} onChange={(e) => setMemo(e.target.value)} placeholder="예: 반 남음" /></Field>
         <div className="flex gap-2 pt-2">
           {initial && onDelete && (
-            <Button type="button" variant="danger" onClick={async () => { await onDelete(initial.id); onClose() }}>삭제</Button>
+            <Button type="button" variant="danger" size="lg" onClick={async () => { await onDelete(initial.id); onClose() }}>삭제</Button>
           )}
-          <Button type="submit" className="flex-1" disabled={saving}>{initial ? '저장' : '냉장고에 넣기'}</Button>
+          <Button type="submit" size="lg" className="flex-1" disabled={saving}>{initial ? '저장' : '냉장고에 넣기'}</Button>
         </div>
       </form>
     </Sheet>

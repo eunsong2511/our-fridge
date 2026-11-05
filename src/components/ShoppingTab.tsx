@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react'
+import { Check, Lightbulb, Minus, Plus, Trash2 } from 'lucide-react'
 import type { Fridge } from '../hooks/useFridge'
 import { ingredientById, resolveIngredientId, searchIngredients } from '../data/ingredients'
 import { suggestIngredients } from '../lib/match'
-import { Button, Empty, inputCls } from './ui'
+import { CATEGORY_TONE, IconTile } from '../lib/visual'
+import { Button, Card, Empty, SectionTitle, inputCls } from './ui'
 
 export function ShoppingTab({ fridge, toast }: { fridge: Fridge; toast: (m: string) => void }) {
   const [name, setName] = useState('')
@@ -25,57 +27,68 @@ export function ShoppingTab({ fridge, toast }: { fridge: Fridge; toast: (m: stri
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <form onSubmit={(e) => { e.preventDefault(); void add(name) }} className="relative flex gap-2">
-        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} onFocus={() => setFocus(true)} onBlur={() => setTimeout(() => setFocus(false), 150)} placeholder="살 것 입력 (예: 두부)" />
-        <Button type="submit">담기</Button>
+        <input className={`${inputCls} shadow-card`} value={name} onChange={(e) => setName(e.target.value)} onFocus={() => setFocus(true)} onBlur={() => setTimeout(() => setFocus(false), 150)} placeholder="살 것 입력 (예: 두부)" />
+        <Button type="submit" variant="accent"><Plus size={16} strokeWidth={3} />담기</Button>
         {auto.length > 0 && name && (
-          <ul className="absolute top-full z-10 mt-1 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-            {auto.map((s) => <li key={s.id}><button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => add(s.name, s.id)} className="w-full px-3 py-2 text-left text-sm hover:bg-emerald-50">{s.name} <span className="text-xs text-slate-400">{s.category}</span></button></li>)}
+          <ul className="absolute top-full z-10 mt-2 w-full overflow-hidden rounded-2xl border border-line bg-paper shadow-float animate-rise">
+            {auto.map((s) => (
+              <li key={s.id}><button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => add(s.name, s.id)} className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm hover:bg-cream">
+                <IconTile tone={CATEGORY_TONE[s.category]} size="sm" /><span className="font-semibold">{s.name}</span><span className="text-xs text-ink-3">{s.category}</span></button></li>
+            ))}
           </ul>
         )}
       </form>
 
       <section>
-        <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-xs font-bold tracking-wide text-slate-400">장보기 목록 · {fridge.shopping.length}</h3>
-          {checked.length > 0 && <Button className="py-1.5 text-xs" onClick={buy}>체크한 {checked.length}개 냉장고에 넣기</Button>}
-        </div>
-        {fridge.shopping.length === 0 ? <Empty icon="🛒" title="장보기 목록이 비어 있어요" desc="아래 추천에서 ＋ 를 눌러 담아보세요" /> : (
-          <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-            {fridge.shopping.map((s) => (
-              <li key={s.id} className="flex items-center gap-3 px-4 py-3">
-                <input type="checkbox" className="size-5 accent-emerald-600" checked={s.done} onChange={(e) => fridge.updateShopping(s.id, { done: e.target.checked })} />
-                <span className={`flex-1 ${s.done ? 'text-slate-400 line-through' : ''}`}>{s.name}</span>
-                <div className="flex items-center gap-1 text-sm">
-                  <button className="rounded-md px-2 text-slate-500 hover:bg-slate-100" onClick={() => fridge.updateShopping(s.id, { qty: Math.max(0.5, s.qty - 1) })}>−</button>
-                  <span className="min-w-10 text-center text-slate-600">{s.qty}{s.unit}</span>
-                  <button className="rounded-md px-2 text-slate-500 hover:bg-slate-100" onClick={() => fridge.updateShopping(s.id, { qty: s.qty + 1 })}>＋</button>
-                </div>
-                <button className="ml-1 text-slate-300 hover:text-red-500" onClick={() => fridge.removeShopping(s.id)} aria-label="삭제">✕</button>
-              </li>
-            ))}
-          </ul>
+        <SectionTitle right={checked.length > 0 && <Button size="sm" onClick={buy}><Check size={14} strokeWidth={3} />{checked.length}개 냉장고에 넣기</Button>}>
+          장보기 목록 <span className="ml-1 text-ink-3">{fridge.shopping.length}</span>
+        </SectionTitle>
+        {fridge.shopping.length === 0 ? <Empty art="basket" title="장보기 목록이 비어 있어요" desc="아래 추천에서 담거나, 요리 상세에서 부족한 재료를 한 번에 담을 수 있어요" /> : (
+          <Card className="overflow-hidden">
+            <ul className="stagger divide-y divide-line/70">
+              {fridge.shopping.map((s) => {
+                const ing = s.ingredientId ? ingredientById(s.ingredientId) : undefined
+                return (
+                  <li key={s.id} className={`flex items-center gap-3 px-4 py-3 transition ${s.done ? 'bg-cream/50' : ''}`}>
+                    <button onClick={() => fridge.updateShopping(s.id, { done: !s.done })} aria-label="체크"
+                      className={`flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all ${s.done ? 'border-leaf bg-leaf text-white' : 'border-line bg-paper text-transparent'}`}><Check size={14} strokeWidth={3.5} /></button>
+                    {ing && <IconTile tone={CATEGORY_TONE[ing.category]} size="sm" className={s.done ? 'opacity-50' : ''} />}
+                    <span className={`flex-1 text-[15px] font-semibold ${s.done ? 'text-ink-3 line-through' : ''}`}>{s.name}</span>
+                    <div className="flex items-center rounded-xl bg-cream-2 p-0.5">
+                      <button className="flex size-7 items-center justify-center rounded-lg text-ink-2 hover:bg-paper" onClick={() => fridge.updateShopping(s.id, { qty: Math.max(0.5, s.qty - 1) })}><Minus size={13} /></button>
+                      <span className="min-w-11 text-center text-xs font-bold tabular-nums text-ink-2">{s.qty}{s.unit}</span>
+                      <button className="flex size-7 items-center justify-center rounded-lg text-ink-2 hover:bg-paper" onClick={() => fridge.updateShopping(s.id, { qty: s.qty + 1 })}><Plus size={13} /></button>
+                    </div>
+                    <button className="p-1 text-ink-3 transition hover:text-berry" onClick={() => fridge.removeShopping(s.id)} aria-label="삭제"><Trash2 size={16} /></button>
+                  </li>
+                )
+              })}
+            </ul>
+          </Card>
         )}
       </section>
 
       <section>
-        <h3 className="mb-2 text-xs font-bold tracking-wide text-slate-400">식재료 추천</h3>
-        {suggestions.length === 0 ? <p className="text-sm text-slate-400">냉장고에 재료를 몇 개 넣으면 추천이 나와요.</p> : (
-          <ul className="space-y-2">
+        <SectionTitle><span className="inline-flex items-center gap-1.5"><Lightbulb size={14} className="text-tangerine" />식재료 추천</span></SectionTitle>
+        {suggestions.length === 0 ? <p className="px-1 text-sm text-ink-3">냉장고에 재료를 몇 개 넣으면 추천이 나와요.</p> : (
+          <ul className="stagger space-y-2">
             {suggestions.map((s) => {
               const already = inList.has(s.ingredientId)
+              const ing = ingredientById(s.ingredientId)!
               return (
-                <li key={s.ingredientId} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                <li key={s.ingredientId} className="flex items-center gap-3 rounded-card bg-paper px-4 py-3 shadow-card">
+                  <IconTile tone={CATEGORY_TONE[ing.category]} />
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium">{s.name}</p>
-                    <p className="truncate text-xs text-slate-500">
+                    <p className="text-[15px] font-bold">{s.name}</p>
+                    <p className="truncate text-xs text-ink-2">
                       {s.reason === 'staple' ? '기본 상비 재료가 떨어졌어요'
-                        : s.unlocks.length ? `이것만 사면 ${s.unlocks.slice(0, 3).join(', ')}${s.unlocks.length > 3 ? ` 외 ${s.unlocks.length - 3}개` : ''} 완성`
+                        : s.unlocks.length ? <>이것만 사면 <b className="text-tangerine-deep">{s.unlocks.slice(0, 3).join(', ')}</b>{s.unlocks.length > 3 ? ` 외 ${s.unlocks.length - 3}개` : ''} 완성</>
                         : `${s.nearly.slice(0, 2).join(', ')} 등 ${s.nearly.length}개 요리에 필요`}
                     </p>
                   </div>
-                  <Button variant={already ? 'ghost' : 'outline'} className="py-1.5 text-xs" disabled={already} onClick={() => add(s.name, s.ingredientId)}>{already ? '담김' : '＋ 담기'}</Button>
+                  <Button size="sm" variant={already ? 'ghost' : 'soft'} disabled={already} onClick={() => add(s.name, s.ingredientId)}>{already ? '담김' : <><Plus size={14} strokeWidth={3} />담기</>}</Button>
                 </li>
               )
             })}

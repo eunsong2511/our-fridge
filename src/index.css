@@ -1,10 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+
+  /* 바탕·잉크 */
+  --color-cream: #FAF7F0;
+  --color-cream-2: #F2EDE1;
+  --color-paper: #FFFFFF;
+  --color-line: #EAE4D6;
+  --color-ink: #1E2A24;
+  --color-ink-2: #5B6A62;
+  --color-ink-3: #9AA69F;
+
+  /* 브랜드 */
+  --color-leaf: #2E9C5A;
+  --color-leaf-deep: #1F7A44;
+  --color-leaf-soft: #E3F3E8;
+  --color-leaf-tint: #F2F9F4;
+  --color-tangerine: #F2862B;
+  --color-tangerine-deep: #D66E16;
+  --color-tangerine-soft: #FDEBDC;
+
+  /* 상태 */
+  --color-berry: #DD4F4F;
+  --color-berry-soft: #FCE6E6;
+  --color-honey: #E39A14;
+  --color-honey-soft: #FFF1CF;
+
+  /* 카테고리 */
+  --color-sky: #3C86C6;
+  --color-sky-soft: #E3EFFA;
+  --color-grape: #8A5CF0;
+  --color-grape-soft: #EEE8FD;
+  --color-cocoa: #A0663A;
+  --color-cocoa-soft: #F5E9DE;
+  --color-butter: #D9A520;
+  --color-butter-soft: #FBF1CF;
+  --color-rose: #E0577E;
+  --color-rose-soft: #FCE6ED;
+
+  --radius-card: 22px;
+  --radius-chip: 14px;
+  --shadow-card: 0 1px 2px rgba(30, 42, 36, 0.04), 0 8px 24px -8px rgba(30, 42, 36, 0.10);
+  --shadow-float: 0 10px 30px -6px rgba(30, 42, 36, 0.22);
+  --shadow-sheet: 0 -12px 40px -8px rgba(30, 42, 36, 0.25);
+
+  --animate-sheet-in: sheet-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade-in: fade-in 0.25s ease-out both;
+  --animate-rise: rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-toast: toast 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+  @keyframes sheet-in { from { transform: translateY(32px); opacity: 0 } to { transform: none; opacity: 1 } }
+  @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes rise { from { transform: translateY(10px); opacity: 0 } to { transform: none; opacity: 1 } }
+  @keyframes toast { from { transform: translateY(12px) scale(0.96); opacity: 0 } to { transform: none; opacity: 1 } }
 }
+
+:root { -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; }
-body { margin: 0; background: #f8fafc; color: #0f172a; }
+body { margin: 0; background: var(--color-cream); color: var(--color-ink); font-family: var(--font-sans); letter-spacing: -0.01em; }
 input, select, button, textarea { font: inherit; }
-.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 4.5rem); }
+::selection { background: var(--color-leaf-soft); }
+
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 6.5rem); }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+.stagger > * { animation: var(--animate-rise); }
+.stagger > *:nth-child(1) { animation-delay: 0ms } .stagger > *:nth-child(2) { animation-delay: 30ms }
+.stagger > *:nth-child(3) { animation-delay: 60ms } .stagger > *:nth-child(4) { animation-delay: 90ms }
+.stagger > *:nth-child(5) { animation-delay: 120ms } .stagger > *:nth-child(6) { animation-delay: 150ms }
+.stagger > *:nth-child(n+7) { animation-delay: 180ms }
+
+/* 날짜 입력 네이티브 모양 정리 */
+input[type="date"] { -webkit-appearance: none; appearance: none; min-height: 2.75rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

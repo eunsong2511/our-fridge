@@ -4,6 +4,13 @@
 
 **배포 주소:** https://eunsong2511.github.io/our-fridge/
 
+## 화면
+| 냉장고 | 요리 | 장보기 | 설정 |
+|---|---|---|---|
+| ![](docs/screenshots/fridge.png) | ![](docs/screenshots/cook.png) | ![](docs/screenshots/shop.png) | ![](docs/screenshots/settings.png) |
+
+체험용 샘플 데이터: 주소 뒤에 `?demo` 를 붙이거나 설정 탭에서 "샘플 데이터 넣기".
+
 ## 기능
 1. **식료품 구매** — 장보기 목록에 담고, 체크한 항목을 냉장고로 한 번에 이동 (유통기한 자동 계산)
 2. **유통기한 D-day** — 재료 이름을 입력하면 보관 방법(냉장/냉동/실온)에 맞는 유통기한을 자동 추천
