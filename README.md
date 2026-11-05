@@ -2,7 +2,7 @@
 
 식재료 유통기한을 D-day로 관리하고, 있는 재료로 만들 수 있는 요리를 n인분 기준으로 추천해주는 웹앱.
 
-**배포 주소:** https://dmsthd0110.github.io/our-fridge/
+**배포 주소:** https://eunsong2511.github.io/our-fridge/
 
 ## 기능
 1. **식료품 구매** — 장보기 목록에 담고, 체크한 항목을 냉장고로 한 번에 이동 (유통기한 자동 계산)
@@ -25,7 +25,7 @@ npm run dev
 ## Supabase 연결 (클라우드 동기화 켜기)
 1. https://supabase.com 에서 새 프로젝트 생성
 2. SQL Editor 에 `supabase/schema.sql` 내용을 붙여넣고 Run
-3. Authentication → URL Configuration → Site URL 을 `https://dmsthd0110.github.io/our-fridge/` 로 설정
+3. Authentication → URL Configuration → Site URL 을 `https://eunsong2511.github.io/our-fridge/` 로 설정
    (가입 확인 메일 없이 바로 쓰려면 Authentication → Providers → Email → "Confirm email" 끄기)
 4. Project Settings → API 의 `Project URL`, `anon public` 키를 GitHub 저장소 Secrets 에 등록
    - `VITE_SUPABASE_URL`
